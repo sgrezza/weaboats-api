@@ -19,7 +19,6 @@
   "scripts": {
     "start": "npm-run-all tsc serve",
     "tsc": "tsc",
-    "serve": "node dist/index.js",
-    "postinstall": "tsc"
+    "serve": "node dist/index.js"
   }
 }
