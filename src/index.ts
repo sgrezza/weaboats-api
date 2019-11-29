@@ -1,8 +1,9 @@
 import express from "express";
+import helmet from "helmet";
 import client, { getDrops, getStats, getRarities } from "./connection";
 import logger from "./logger";
 const app = express();
-
+app.use(helmet());
 app.get("/rarities", async (req: any, res: any) => {
   try {
     const conn = await getRarities();

@@ -8,6 +8,7 @@
     "@types/mongodb": "^3.3.11",
     "express": "^4.17.1",
     "fastify": "^2.10.0",
+    "helmet": "^3.21.2",
     "mongodb": "^3.3.5",
     "typescript": "^3.7.2",
     "winston": "^3.2.1"
