@@ -1,14 +1,28 @@
 import express from "express";
 import helmet from "helmet";
+import cache from "node-cache";
+
 import client, { getDrops, getStats, getRarities } from "./connection";
 import logger from "./logger";
 const app = express();
+const apiCache = new cache();
+
 app.use(helmet());
-app.get("/rarities", async (req: any, res: any) => {
+app.get("/rarities", async (req, res) => {
   try {
+    res.set("content-type", "application/json");
+
+    const cached = apiCache.get<string>("rarities");
+    if (cached !== undefined) {
+      logger.info("Read rarities from cache.");
+      return res.json(JSON.parse(cached));
+    }
+
     const conn = await getRarities();
     logger.info("Request for names");
-    res.send(conn);
+
+    res.json(conn);
+    return apiCache.set("rarities", JSON.stringify(conn));
   } catch (e) {
     logger.error(e.message);
     res.status(500).send("Server Error");
@@ -20,19 +34,34 @@ app.get("/drops/:name", async (req, res: any) => {
   if (name === undefined) {
     return res.status(404).send("Ship not provided or not found");
   }
+  const cached = apiCache.get<string>(`${name}.drops`);
+  if (cached !== undefined) {
+    logger.info(`Read ${name} drops from cache.`);
+    return res.json(JSON.parse(cached));
+  }
   const result = await getDrops(name);
   logger.info("Request for drops.");
   res.send(result);
+  return apiCache.set(`${name}.drops`, JSON.stringify(result));
 });
+
 app.get("/stats/:name", async (req, res) => {
   const { name } = req.params;
   if (name === undefined) {
     return res.status(404).send("Ship not provided or not found");
   }
+
+  const cached = apiCache.get<string>(`${name}.stats`);
+  if (cached !== undefined) {
+    logger.info(`Read ${name} stats from cache.`);
+    return res.json(JSON.parse(cached));
+  }
   const result = await getStats(name);
   logger.info("Request for stats.");
   res.send(result);
+  return apiCache.set(`${name}.stats`, JSON.stringify(result));
 });
+
 client.connect(() => {
   app.listen(process.env.PORT || 3000, () => {
     console.log(`Listening on ${process.env.PORT}`);
