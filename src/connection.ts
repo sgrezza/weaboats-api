@@ -1,5 +1,10 @@
 import { MongoClient } from "mongodb";
-import { dropsProject, statsProject, raritiesProject } from "./schemas";
+import {
+  dropsProject,
+  statsProject,
+  raritiesProject,
+  skillsProject
+} from "./schemas";
 const uri =
   "mongodb+srv://editor:tVbzQpHj03pLPthY@cluster0-vw3mj.mongodb.net/test?retryWrites=true&w=majority";
 const client = new MongoClient(uri, {
@@ -18,7 +23,17 @@ const getStats = async (name: string) => {
 };
 const getRarities = async () => {
   const ref = client.db("boats").collection("boats");
-  return ref.find({}).project(raritiesProject).toArray();
+  return ref
+    .find({})
+    .project(raritiesProject)
+    .toArray();
 };
-export { getStats, getDrops, getRarities };
+const getSkills = async (name: string) => {
+  const ref = client.db("boats").collection("boats");
+  return ref
+    .find({ name })
+    .project(skillsProject)
+    .toArray();
+};
+export { getStats, getDrops, getRarities, getSkills };
 export default client;

@@ -9,7 +9,20 @@ export const raritiesProject = {
   rarity: 1,
   type: 1
 };
-
+export const skillsProject = {
+  skill1: 1,
+  skill1Desc: 1,
+  skill1Icon: 1,
+  skill2: 1,
+  skill2Desc: 1,
+  skill2Icon: 1,
+  skill3: 1,
+  skill3Desc: 1,
+  skill3Icon: 1,
+  skill4: 1,
+  skill4Desc: 1,
+  skill4Icon: 1,
+}
 export const statsProject = {
   aa120: 1,
   aaInitial: 1,
