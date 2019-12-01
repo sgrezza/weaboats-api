@@ -1,7 +1,12 @@
 import express from "express";
 import helmet from "helmet";
 
-import client, { getDrops, getStats, getRarities, getSkills } from "./connection";
+import client, {
+  getDrops,
+  getStats,
+  getRarities,
+  getSkills
+} from "./connection";
 import logger from "./logger";
 import { askCache, apiCache } from "./cache";
 const app = express();
@@ -45,6 +50,8 @@ app.get("/drops/:name", async (req, res: any) => {
 });
 
 app.get("/stats/:name", async (req, res) => {
+  const { name } = req.params;
+
   const result = await getStats(name);
   logger.info("Request for stats.");
   res.send(result);
