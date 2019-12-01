@@ -1,11 +1,10 @@
 import express from "express";
 import helmet from "helmet";
-import cache from "node-cache";
 
 import client, { getDrops, getStats, getRarities } from "./connection";
 import logger from "./logger";
+import { askCache, apiCache } from "./cache";
 const app = express();
-const apiCache = new cache();
 
 app.use(helmet());
 app.get("/rarities", async (req, res) => {
@@ -28,17 +27,13 @@ app.get("/rarities", async (req, res) => {
     res.status(500).send("Server Error");
   }
 });
-
+app.use(askCache);
 app.get("/drops/:name", async (req, res: any) => {
   const { name } = req.params;
   if (name === undefined) {
     return res.status(404).send("Ship not provided or not found");
   }
-  const cached = apiCache.get<string>(`${name}.drops`);
-  if (cached !== undefined) {
-    logger.info(`Read ${name} drops from cache.`);
-    return res.json(JSON.parse(cached));
-  }
+
   const result = await getDrops(name);
   logger.info("Request for drops.");
   res.send(result);
@@ -51,11 +46,6 @@ app.get("/stats/:name", async (req, res) => {
     return res.status(404).send("Ship not provided or not found");
   }
 
-  const cached = apiCache.get<string>(`${name}.stats`);
-  if (cached !== undefined) {
-    logger.info(`Read ${name} stats from cache.`);
-    return res.json(JSON.parse(cached));
-  }
   const result = await getStats(name);
   logger.info("Request for stats.");
   res.send(result);
