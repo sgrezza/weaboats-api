@@ -30,10 +30,7 @@ const getRarities = async () => {
 };
 const getSkills = async (name: string) => {
   const ref = client.db("boats").collection("boats");
-  return ref
-    .find({ name })
-    .project(skillsProject)
-    .toArray();
+  return ref.findOne({ name }, { projection: statsProject });
 };
 export { getStats, getDrops, getRarities, getSkills };
 export default client;
