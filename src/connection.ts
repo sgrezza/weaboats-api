@@ -5,13 +5,14 @@ import {
   raritiesProject,
   skillsProject
 } from "./schemas";
+import logger from "./logger";
 const uri =
   "mongodb+srv://editor:tVbzQpHj03pLPthY@cluster0-vw3mj.mongodb.net/test?retryWrites=true&w=majority";
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   ssl: true,
   useUnifiedTopology: true,
-  connectTimeoutMS: 1000
+  connectTimeoutMS: 1000,
 });
 const getDrops = async (name: string) => {
   const ref = client.db("boats").collection("boats");
