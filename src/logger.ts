@@ -1,16 +1,17 @@
-import winston, { LoggerOptions } from "winston";
+import winston from "winston";
 
-type Options = {
-  file: LoggerOptions;
-  console: LoggerOptions;
-};
 // const options: Options = {
 //   file: {
 //     level: "info",
 //   }
 // };
 const logger = winston.createLogger({
-  transports: [new winston.transports.Console()]
+  levels: winston.config.syslog.levels,
+  transports: [
+    new winston.transports.Console({
+      level: "info"
+    })
+  ]
 });
 
 export default logger;

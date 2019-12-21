@@ -1,15 +1,18 @@
 export const dropsProject = {
+  _id: 0,
   dropNote: 1,
   dropLocations: 1,
   constructionCategories: 1,
   constructionNote: 1
 };
 export const raritiesProject = {
+  _id: 0,
   name: 1,
   rarity: 1,
   type: 1
 };
 export const skillsProject = {
+  _id: 0,
   skill1: 1,
   skill1Desc: 1,
   skill1Icon: 1,
@@ -24,6 +27,7 @@ export const skillsProject = {
   skill4Icon: 1,
 }
 export const statsProject = {
+  _id: 0,
   aa120: 1,
   aaInitial: 1,
   aaKai: 1,
