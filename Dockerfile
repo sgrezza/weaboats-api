@@ -1,13 +1,15 @@
 
-FROM node:12.13.1
+FROM node:current-alpine
 ARG LISTENPORT=3000
+ENV NODE_ENV PRODUCTION
 ENV PORT 3000
 WORKDIR /app
 
 COPY package.json /app
-RUN npm cache clean --force && npm install --unsafe-perm
+RUN npm install -g -s yarn && \
+    yarn && \
+    yarn cache clean
 COPY . /app
 
-
 EXPOSE 3000
-CMD ["npm", "run", "start"]
+CMD ["yarn", "run", "start"]
