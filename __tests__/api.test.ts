@@ -1,6 +1,6 @@
 import supertest from "supertest";
 import app from "../src/app";
-import client from "../src/connection";
+import client from "../src/connections/mongodb";
 beforeAll(async () => {
   await client.connect();
 });

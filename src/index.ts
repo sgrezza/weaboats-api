@@ -1,5 +1,5 @@
 import app from "./app";
-import client from "./connection";
+import client from "./connections/mongodb";
 import logger from "./logger";
 
 let server;

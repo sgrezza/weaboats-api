@@ -1,7 +1,6 @@
 import express from "express";
 import helmet from "helmet";
-import createTerminus from "terminus";
-import { getDrops, getStats, getRarities, getSkills } from "./connection";
+import { getDrops, getStats, getRarities, getSkills } from "./connections/mongodb";
 import logger from "./logger";
 import { askCache, apiCache } from "./cache";
 const app = express();
