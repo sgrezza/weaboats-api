@@ -11,7 +11,7 @@ import apiCacheA from "apicache";
 import { askCache, apiCache } from "./cache";
 const app = express();
 const apiCacheMiddleware = apiCacheA.options({
-  debug: true
+  debug: process.env.NODE_ENV === 'production' ? false : true;
 }).middleware;
 app.use(apiCacheMiddleware("1 day"));
 app.use(helmet());
