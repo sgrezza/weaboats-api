@@ -3,7 +3,8 @@ import {
   dropsProject,
   statsProject,
   raritiesProject,
-  skillsProject
+  skillsProject,
+  miscProject
 } from "./schemas";
 import logger from "../logger";
 const uri =
@@ -14,18 +15,18 @@ const client = new MongoClient(uri, {
   useUnifiedTopology: true,
   connectTimeoutMS: 1000
 });
-const getDrops = async (name: string) => {
+export const getDrops = async (name: string) => {
   logger.info(`Fetching drops for ${name}`);
   const ref = client.db("boats").collection("boats");
   return ref.findOne({ name }, { projection: dropsProject });
 };
-const getStats = async (name: string) => {
+export const getStats = async (name: string) => {
   logger.info(`Fetching stats for ${name}`);
 
   const ref = client.db("boats").collection("boats");
   return ref.findOne({ name }, { projection: statsProject });
 };
-const getRarities = async () => {
+export const getRarities = async () => {
   logger.info(`Fetching rarities`);
 
   const ref = client.db("boats").collection("boats");
@@ -34,10 +35,13 @@ const getRarities = async () => {
     .project(raritiesProject)
     .toArray();
 };
-const getSkills = async (name: string) => {
+export const getSkills = async (name: string) => {
   logger.info(`Fetching skills for ${name}`);
   const ref = client.db("boats").collection("boats");
   return ref.findOne({ name }, { projection: skillsProject });
 };
-export { getStats, getDrops, getRarities, getSkills };
+export const getMisc = async name => {
+  const ref = client.db("boats").collection("boats");
+  return ref.findOne({ name }, { projection: miscProject });
+};
 export default client;

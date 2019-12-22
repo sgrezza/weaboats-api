@@ -4,14 +4,14 @@ import {
   getDrops,
   getStats,
   getRarities,
-  getSkills
+  getSkills,
+  getMisc
 } from "./connections/mongodb";
 import logger from "./logger";
 import apiCacheA from "apicache";
-import { askCache, apiCache } from "./cache";
 const app = express();
 const apiCacheMiddleware = apiCacheA.options({
-  debug: process.env.NODE_ENV === 'production' ? false : true
+  debug: process.env.NODE_ENV === undefined ? true : false
 }).middleware;
 app.use(apiCacheMiddleware("1 day"));
 app.use(helmet());
@@ -23,23 +23,15 @@ app.get("/rarities", async (req, res) => {
   try {
     res.set("content-type", "application/json");
 
-    // const cached = apiCache.get<string>("rarities");
-    // if (cached !== undefined) {
-    //   logger.info("Read rarities from cache.");
-    //   return res.json(JSON.parse(cached));
-    // }
-
     const conn = await getRarities();
     logger.info("Request for names");
 
     return res.json(conn);
-    // return apiCache.set("rarities", JSON.stringify(conn));
   } catch (e) {
     logger.error(e.message);
     res.status(500).send("Server Error");
   }
 });
-// app.use(askCache);
 app.get("/drops/:name", async (req, res: any) => {
   const { name } = req.params;
   if (name === undefined) {
@@ -48,8 +40,7 @@ app.get("/drops/:name", async (req, res: any) => {
 
   const result = await getDrops(name);
   logger.info("Request for drops.");
-  res.send(result);
-  return apiCache.set(`${name}.drops`, JSON.stringify(result));
+  return res.send(result);
 });
 
 app.get("/stats/:name", async (req, res) => {
@@ -57,15 +48,17 @@ app.get("/stats/:name", async (req, res) => {
 
   const result = await getStats(name);
   logger.info("Request for stats.");
-  res.send(result);
-  return apiCache.set(`${name}.stats`, JSON.stringify(result));
+  return res.send(result);
 });
 app.get("/skills/:name", async (req, res) => {
   const { name } = req.params;
   const result = await getSkills(name);
   logger.info("Request for skills.");
-  res.send(result);
-  return apiCache.set(`${name}.skills`, JSON.stringify(result));
+  return res.send(result);
+});
+app.get("/misc/:name", async (req, res) => {
+  const { name } = req.params;
+  return res.send(await getMisc(name));
 });
 // const server = createTerminus(app)
 export default app;

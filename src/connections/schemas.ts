@@ -24,8 +24,8 @@ export const skillsProject = {
   skill3Icon: 1,
   skill4: 1,
   skill4Desc: 1,
-  skill4Icon: 1,
-}
+  skill4Icon: 1
+};
 export const statsProject = {
   _id: 0,
   aa120: 1,
@@ -95,5 +95,12 @@ export const statsProject = {
   torpKai120: 1,
   torpMax: 1
 };
-
-export default { dropsProject, statsProject, raritiesProject };
+export const miscProject = {
+  _id: 0,
+  techPoint120: 1,
+  techPointCollect: 1,
+  techPointMlb: 1,
+  nationality: 1,
+  retrofitImageA: 1
+};
+export default { dropsProject, statsProject, raritiesProject, miscProject };

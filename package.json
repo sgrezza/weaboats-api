@@ -33,7 +33,7 @@
   "scripts": {
     "start": "npm-run-all tsc serve",
     "tsc": "tsc",
-    "serve": "node dist/src/index.js",
+    "serve": "node dist/index.js",
     "test": "jest --detectOpenHandles"
   }
 }

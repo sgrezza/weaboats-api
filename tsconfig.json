@@ -8,10 +8,11 @@
     "sourceMap": false,
     "allowSyntheticDefaultImports": true,
     "strict": true,
+    "rootDir": "src",
     "outDir": "dist",
     "removeComments": false,
     "declaration": true
   },
   "lib": ["es2015"],
-  "exclude": ["node_modules", "**/*.spec.ts", "dist"]
+  "exclude": ["node_modules", "**/*.spec.ts", "dist", "__tests__"]
 }
