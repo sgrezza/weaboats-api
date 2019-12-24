@@ -93,14 +93,14 @@ export const statsProject = {
   torpInitial: 1,
   torpKai: 1,
   torpKai120: 1,
-  torpMax: 1
-};
-export const miscProject = {
-  _id: 0,
+  torpMax: 1,
   techPoint120: 1,
   techPointCollect: 1,
   techPointMlb: 1,
   nationality: 1,
   retrofitImageA: 1
+};
+export const miscProject = {
+  _id: 0
 };
 export default { dropsProject, statsProject, raritiesProject, miscProject };

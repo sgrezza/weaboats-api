@@ -5,7 +5,6 @@ import {
   getStats,
   getRarities,
   getSkills,
-  getMisc
 } from "./connections/mongodb";
 import logger from "./logger";
 import apiCacheA from "apicache";
@@ -56,9 +55,6 @@ app.get("/skills/:name", async (req, res) => {
   logger.info("Request for skills.");
   return res.send(result);
 });
-app.get("/misc/:name", async (req, res) => {
-  const { name } = req.params;
-  return res.send(await getMisc(name));
-});
+
 // const server = createTerminus(app)
 export default app;

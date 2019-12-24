@@ -27,6 +27,7 @@
     "@typescript-eslint/parser": "^2.9.0",
     "eslint": "^6.7.1",
     "jest": "^24.9.0",
+    "rimraf": "^3.0.0",
     "supertest": "^4.0.2",
     "ts-jest": "^24.2.0"
   },
@@ -34,6 +35,8 @@
     "start": "npm-run-all tsc serve",
     "tsc": "tsc",
     "serve": "node dist/index.js",
-    "test": "jest --detectOpenHandles"
+    "test": "npm-run-all rm realtest",
+    "rm": "rimraf ./dist",
+    "realtest": "jest --detectOpenHandles"
   }
 }
