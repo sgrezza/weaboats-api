@@ -3,7 +3,8 @@ export const dropsProject = {
   dropNote: 1,
   dropLocations: 1,
   constructionCategories: 1,
-  constructionNote: 1
+  constructionNote: 1,
+  rarity: 1
 };
 export const raritiesProject = {
   _id: 0,

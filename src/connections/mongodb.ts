@@ -7,6 +7,7 @@ import {
   miscProject
 } from "./schemas";
 import logger from "../logger";
+import { determineIfAvailable } from "./availability";
 const uri = process.env.MONGODB_KEY || "";
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
@@ -17,7 +18,10 @@ const client = new MongoClient(uri, {
 export const getDrops = async (name: string) => {
   logger.info(`Fetching drops for ${name}`);
   const ref = client.db("boats").collection("boats");
-  return ref.findOne({ name }, { projection: dropsProject });
+  return ref.findOne({ name }, { projection: dropsProject }).then(res => {
+    const availability = determineIfAvailable(res, res.rarity);
+    return { ...res, availability };
+  });
 };
 export const getStats = async (name: string) => {
   logger.info(`Fetching stats for ${name}`);

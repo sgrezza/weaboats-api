@@ -13,13 +13,14 @@ export const forbinSkills = {
   skill3Icon: "20000"
 };
 export const forbinDrops = {
-  _id: "5de17967142d5980ccdc33b7",
   constructionCategories: {
     limited: "Only during event: Iris of the Light and the Dark"
   },
   constructionNote:
     "Available in Limited Construction during Iris of the Light and the Dark Event.",
-  dropNote: "Iris of the Light and the Dark"
+  dropNote: "Iris of the Light and the Dark",
+  rarity: "Rare",
+  availability: "Event Construction"
 };
 export const forbinMisc = {
   nationality: "Iris Libre",
