@@ -7,8 +7,7 @@ import {
   miscProject
 } from "./schemas";
 import logger from "../logger";
-const uri =
-  "mongodb+srv://editor:tVbzQpHj03pLPthY@cluster0-vw3mj.mongodb.net/test?retryWrites=true&w=majority";
+const uri = process.env.MONGODB_KEY || "";
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   ssl: true,

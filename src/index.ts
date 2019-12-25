@@ -1,3 +1,6 @@
+import { resolve } from "path";
+import { config } from "dotenv";
+config({ path: resolve(__dirname, "../.env") });
 import app from "./app";
 import client from "./connections/mongodb";
 import logger from "./logger";

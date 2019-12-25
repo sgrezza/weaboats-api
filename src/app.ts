@@ -4,7 +4,7 @@ import {
   getDrops,
   getStats,
   getRarities,
-  getSkills,
+  getSkills
 } from "./connections/mongodb";
 import logger from "./logger";
 import apiCacheA from "apicache";
@@ -36,25 +36,34 @@ app.get("/drops/:name", async (req, res: any) => {
   if (name === undefined) {
     return res.status(404).send("Ship not provided or not found");
   }
-
-  const result = await getDrops(name);
-  logger.info("Request for drops.");
-  return res.send(result);
+  try {
+    const result = await getDrops(name);
+    logger.info("Request for drops.");
+    return res.send(result);
+  } catch (e) {
+    return res.status(500).send("Server Error");
+  }
 });
 
 app.get("/stats/:name", async (req, res) => {
   const { name } = req.params;
-
-  const result = await getStats(name);
-  logger.info("Request for stats.");
-  return res.send(result);
+  try {
+    const result = await getStats(name);
+    logger.info("Request for stats.");
+    return res.send(result);
+  } catch (e) {
+    return res.status(500).send("Server Error");
+  }
 });
 app.get("/skills/:name", async (req, res) => {
   const { name } = req.params;
-  const result = await getSkills(name);
-  logger.info("Request for skills.");
-  return res.send(result);
+  try {
+    const result = await getSkills(name);
+    logger.info("Request for skills.");
+    return res.send(result);
+  } catch (e) {
+    return res.status(500).send("Server Error");
+  }
 });
 
-// const server = createTerminus(app)
 export default app;
