@@ -6,9 +6,12 @@ ENV PORT 3000
 WORKDIR /app
 
 COPY package.json /app
-RUN npm install -g -s yarn && \
-    yarn && \
+RUN yarn --production && \
     yarn cache clean
+# install -g -s yarn \
+ #  && yarn  \
+  # && yarn cache clean
+
 COPY . /app
 
 EXPOSE 3000
