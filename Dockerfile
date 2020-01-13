@@ -3,7 +3,7 @@ WORKDIR /build
 COPY . /build
 
 RUN yarn --silent && \
-    yarn run build
+    yarn run tsc
 # # Look up multistage builds
 FROM node:12.14.1-alpine
 
