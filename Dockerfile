@@ -1,18 +1,20 @@
+FROM node:12.14.1-alpine as build
+WORKDIR /build
+COPY . /build
 
-FROM node:current-alpine
-ARG LISTENPORT=3000
-ENV NODE_ENV PRODUCTION
-ENV PORT 3000
-WORKDIR /app
+RUN yarn --silent && \
+    yarn run build
+# # Look up multistage builds
+FROM node:12.14.1-alpine
 
-COPY package.json /app
+ENV NODE_ENV=production
+
+WORKDIR /usr/src/service
+COPY --from=build /build/package.json /build/yarn.lock ./
+COPY --from=build /build/dist dist/
 RUN yarn --production && \
     yarn cache clean
-# install -g -s yarn \
- #  && yarn  \
-  # && yarn cache clean
-
-COPY . /app
 
 EXPOSE 3000
-CMD ["yarn", "run", "start"]
+
+CMD ["yarn", "run", "serve"]
