@@ -10,7 +10,9 @@ import logger from "./logger";
 import apiCacheA from "apicache";
 const app = express();
 const apiCacheMiddleware = apiCacheA.options({
-  debug: process.env.NODE_ENV === undefined ? true : false
+  statusCodes: {
+    include: [200]
+  }
 }).middleware;
 app.use(apiCacheMiddleware("1 day"));
 app.use(helmet());
@@ -21,14 +23,13 @@ app.get("/", (req, res) => {
 app.get("/rarities", async (req, res) => {
   try {
     res.set("content-type", "application/json");
-
     const conn = await getRarities();
     logger.info("Request for names");
 
     return res.json(conn);
   } catch (e) {
     logger.error(e.message);
-    res.status(500).send("Server Error");
+    return res.status(500).send("Server Error");
   }
 });
 app.get("/drops/:name", async (req, res: any) => {
@@ -39,8 +40,12 @@ app.get("/drops/:name", async (req, res: any) => {
   try {
     const result = await getDrops(name);
     logger.info("Request for drops.");
+    if (!result || result.length === 0) {
+      throw `${new Date().toLocaleString()} - Error getting stats for ${name}`;
+    }
     return res.send(result);
   } catch (e) {
+    console.error(e);
     return res.status(500).send("Server Error");
   }
 });
@@ -50,8 +55,12 @@ app.get("/stats/:name", async (req, res) => {
   try {
     const result = await getStats(name);
     logger.info("Request for stats.");
+    if (!result || result.length === 0) {
+      throw `${new Date().toLocaleString()} - Error getting stats for ${name}`;
+    }
     return res.send(result);
   } catch (e) {
+    console.error(e);
     return res.status(500).send("Server Error");
   }
 });
@@ -60,10 +69,20 @@ app.get("/skills/:name", async (req, res) => {
   try {
     const result = await getSkills(name);
     logger.info("Request for skills.");
-    return res.send(result);
+    if (!result || result.length === 0) {
+      throw `${new Date().toLocaleString()} - Error getting skills for ${name}`;
+    }
+    return res.status(200).send(result);
   } catch (e) {
+    console.error(e);
     return res.status(500).send("Server Error");
   }
 });
+
+const nut = (req, res, next) => {
+  console.log("nut");
+  return next();
+};
+app.use(nut);
 
 export default app;
