@@ -34,7 +34,7 @@ export const getRarities = async () => {
 
   const ref = client.db("boats").collection("boats");
   return ref
-    .find({})
+    .find({ rarity: { $ne: "Unreleased" } })
     .project(raritiesProject)
     .toArray();
 };
