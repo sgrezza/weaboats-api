@@ -99,7 +99,10 @@ export const statsProject = {
   techPointCollect: 1,
   techPointMlb: 1,
   nationality: 1,
-  retrofitImageA: 1
+  retrofitImageA: 1,
+  lb1: 1,
+  lb2: 1,
+  lb3: 1
 };
 export const miscProject = {
   _id: 0
