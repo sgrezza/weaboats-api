@@ -48,4 +48,7 @@ export const getMisc = async name => {
   const ref = client.db("boats").collection("boats");
   return ref.findOne({ name }, { projection: miscProject });
 };
+export const status = () => {
+  return client.isConnected();
+};
 export default client;

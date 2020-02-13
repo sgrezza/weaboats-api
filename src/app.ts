@@ -4,7 +4,8 @@ import {
   getDrops,
   getStats,
   getRarities,
-  getSkills
+  getSkills,
+  status
 } from "./connections/mongodb";
 import logger from "./logger";
 import apiCacheA from "apicache";
@@ -17,8 +18,9 @@ const apiCacheMiddleware = apiCacheA.options({
 }).middleware;
 app.use(apiCacheMiddleware("1 day"));
 app.use(helmet());
-app.get("/", (req, res) => {
-  res.status(200).send("Hi.");
+app.get("/", async (req, res) => {
+  res.status(200).send(`Hi.
+Everything cool? ${await status()} `);
 });
 
 app.get("/rarities", async (req, res) => {
@@ -81,7 +83,7 @@ app.get("/skills/:name", async (req, res) => {
 });
 app.get("/nations/:nation?", async (req, res) => {
   // const { nation } = req.params;
-  return res.send(await getNations('Eagle Union'));
+  return res.send(await getNations("Eagle Union"));
 });
 const nut = (req, res, next) => {
   console.log("nut");
