@@ -36,8 +36,8 @@
   },
   "scripts": {
     "start": "ts-node src/index.ts",
-    "_tsc": "tsc",
-    "_serve": "node dist/index.js",
+    "tsc": "tsc",
+    "serve": "node dist/index.js",
     "test": "npm-run-all rm realtest",
     "rm": "rimraf ./dist",
     "realtest": "jest --detectOpenHandles"
