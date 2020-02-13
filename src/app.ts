@@ -8,6 +8,7 @@ import {
 } from "./connections/mongodb";
 import logger from "./logger";
 import apiCacheA from "apicache";
+import { getNations } from "./connections/nations";
 const app = express();
 const apiCacheMiddleware = apiCacheA.options({
   statusCodes: {
@@ -78,7 +79,10 @@ app.get("/skills/:name", async (req, res) => {
     return res.status(500).send("Server Error");
   }
 });
-
+app.get("/nations/:nation?", async (req, res) => {
+  // const { nation } = req.params;
+  return res.send(await getNations('Eagle Union'));
+});
 const nut = (req, res, next) => {
   console.log("nut");
   return next();

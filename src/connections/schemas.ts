@@ -10,7 +10,8 @@ export const raritiesProject = {
   _id: 0,
   name: 1,
   rarity: 1,
-  type: 1
+  type: 1,
+  nationality: 1
 };
 export const skillsProject = {
   _id: 0,

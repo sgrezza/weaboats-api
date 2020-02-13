@@ -9,7 +9,7 @@ import {
 import logger from "../logger";
 import { determineIfAvailable } from "./availability";
 const uri = process.env.MONGODB_KEY || "";
-const client = new MongoClient(uri, {
+export const client = new MongoClient(uri, {
   useNewUrlParser: true,
   ssl: true,
   useUnifiedTopology: true,
@@ -23,6 +23,7 @@ export const getDrops = async (name: string) => {
     return { ...res, availability };
   });
 };
+
 export const getStats = async (name: string) => {
   logger.info(`Fetching stats for ${name}`);
 
