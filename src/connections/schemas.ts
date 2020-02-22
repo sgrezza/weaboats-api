@@ -103,7 +103,8 @@ export const statsProject = {
   retrofitImageA: 1,
   lb1: 1,
   lb2: 1,
-  lb3: 1
+  lb3: 1,
+  id: 1
 };
 export const miscProject = {
   _id: 0
