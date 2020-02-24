@@ -11,7 +11,8 @@ export const raritiesProject = {
   name: 1,
   rarity: 1,
   type: 1,
-  nationality: 1
+  nationality: 1,
+  id: 1
 };
 export const skillsProject = {
   _id: 0,
