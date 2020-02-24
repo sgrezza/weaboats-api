@@ -48,6 +48,10 @@ export const getMisc = async name => {
   const ref = client.db("boats").collection("boats");
   return ref.findOne({ name }, { projection: miscProject });
 };
+export const getSkins = async name => {
+  const ref = client.db("boats").collection("boats");
+  return ref.findOne({ name }, { projection: { _id: 0, skins: 1 } });
+};
 export const status = () => {
   return client.isConnected();
 };

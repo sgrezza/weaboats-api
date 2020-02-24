@@ -5,11 +5,11 @@ import {
   getStats,
   getRarities,
   getSkills,
+  getSkins,
   status
 } from "./connections/mongodb";
 import logger from "./logger";
 import apiCacheA from "apicache";
-import { getNations } from "./connections/nations";
 const app = express();
 const apiCacheMiddleware = apiCacheA.options({
   statusCodes: {
@@ -81,9 +81,19 @@ app.get("/skills/:name", async (req, res) => {
     return res.status(500).send("Server Error");
   }
 });
-app.get("/nations/:nation?", async (req, res) => {
-  // const { nation } = req.params;
-  return res.send(await getNations("Eagle Union"));
+app.get("/skins/:name", async (req, res) => {
+  const { name } = req.params;
+  try {
+    const result = await getSkins(name);
+    logger.info("Request for skins.");
+    if (!result || result.length === 0) {
+      throw `${new Date().toLocaleString()} - Error getting skins for ${name}`;
+    }
+    return res.status(200).send(result);
+  } catch (e) {
+    console.error(e);
+    return res.status(500).send("Server Error");
+  }
 });
 const nut = (req, res, next) => {
   console.log("nut");
