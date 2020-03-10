@@ -1,4 +1,4 @@
-import { MongoClient } from "mongodb";
+import { MongoClient, Collection } from "mongodb";
 import {
   dropsProject,
   statsProject,
@@ -15,19 +15,19 @@ export const client = new MongoClient(uri, {
   useUnifiedTopology: true,
   connectTimeoutMS: 1000
 });
-export const getDrops = async (name: string) => {
-  logger.info(`Fetching drops for ${name}`);
-  const ref = client.db("boats").collection("boats");
+type Intent = "skins" | "stats" | "drops" | "skills";
+
+const getRef = () => client.db("boats").collection("boats");
+
+export const getDrops = async (ref: Collection<any>, name: string) => {
   return ref.findOne({ name }, { projection: dropsProject }).then(res => {
     const availability = determineIfAvailable(res, res.rarity);
     return { ...res, availability };
   });
 };
 
-export const getStats = async (name: string) => {
+export const getStats = async (ref: Collection<any>, name: string) => {
   logger.info(`Fetching stats for ${name}`);
-
-  const ref = client.db("boats").collection("boats");
   return ref.findOne({ name }, { projection: statsProject });
 };
 export const getRarities = async () => {
@@ -39,20 +39,31 @@ export const getRarities = async () => {
     .project(raritiesProject)
     .toArray();
 };
-export const getSkills = async (name: string) => {
+export const getSkills = async (ref: Collection<any>, name: string) => {
   logger.info(`Fetching skills for ${name}`);
-  const ref = client.db("boats").collection("boats");
   return ref.findOne({ name }, { projection: skillsProject });
 };
-export const getMisc = async name => {
-  const ref = client.db("boats").collection("boats");
-  return ref.findOne({ name }, { projection: miscProject });
-};
-export const getSkins = async name => {
-  const ref = client.db("boats").collection("boats");
+
+export const getSkins = async (ref: Collection<any>, name: string) => {
   return ref.findOne({ name }, { projection: { _id: 0, skins: 1 } });
+};
+export const getRetrofits = async () => {
+  const ref = getRef();
+  return ref
+    .find({ aaKai: { $exists: true } })
+    .project({ name: 1, __id: 0, id: 1 });
 };
 export const status = () => {
   return client.isConnected();
+};
+const responser = {
+  drops: getDrops,
+  stats: getStats,
+  skills: getSkills,
+  skins: getSkins
+};
+export const get = async (intent: Intent, name: string) => {
+  const ref = getRef();
+  return responser[intent](ref, name);
 };
 export default client;

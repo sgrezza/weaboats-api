@@ -6,7 +6,8 @@ import {
   getRarities,
   getSkills,
   getSkins,
-  status
+  status,
+  get
 } from "./connections/mongodb";
 import logger from "./logger";
 import apiCacheA from "apicache";
@@ -35,64 +36,29 @@ app.get("/rarities", async (req, res) => {
     return res.status(500).send("Server Error");
   }
 });
-app.get("/drops/:name", async (req, res: any) => {
-  const { name } = req.params;
-  if (name === undefined) {
-    return res.status(404).send("Ship not provided or not found");
-  }
-  try {
-    const result = await getDrops(name);
-    logger.info("Request for drops.");
-    if (!result || result.length === 0) {
-      throw `${new Date().toLocaleString()} - Error getting stats for ${name}`;
-    }
-    return res.send(result);
-  } catch (e) {
-    console.error(e);
-    return res.status(500).send("Server Error");
-  }
-});
 
-app.get("/stats/:name", async (req, res) => {
-  const { name } = req.params;
-  try {
-    const result = await getStats(name);
-    logger.info("Request for stats.");
-    if (!result || result.length === 0) {
-      throw `${new Date().toLocaleString()} - Error getting stats for ${name}`;
-    }
-    return res.send(result);
-  } catch (e) {
-    console.error(e);
-    return res.status(500).send("Server Error");
+app.get("/:intent/:name", async (req, res) => {
+  const { intent, name } = req.params;
+  if (intent === undefined || name === undefined) {
+    return res.sendStatus(400).send("Error.");
   }
-});
-app.get("/skills/:name", async (req, res) => {
-  const { name } = req.params;
   try {
-    const result = await getSkills(name);
-    logger.info("Request for skills.");
-    if (!result || result.length === 0) {
-      throw `${new Date().toLocaleString()} - Error getting skills for ${name}`;
+    let response;
+    switch (
+      intent // Make sure 'intent' is a valid endpoint
+    ) {
+      case "drops":
+      case "stats":
+      case "skills":
+      case "skins":
+        response = await get(intent, name);
+        break;
+      default:
+        response = "Error. Endpoint not found.";
     }
-    return res.status(200).send(result);
+    res.send(response);
   } catch (e) {
-    console.error(e);
-    return res.status(500).send("Server Error");
-  }
-});
-app.get("/skins/:name", async (req, res) => {
-  const { name } = req.params;
-  try {
-    const result = await getSkins(name);
-    logger.info("Request for skins.");
-    if (!result || result.length === 0) {
-      throw `${new Date().toLocaleString()} - Error getting skins for ${name}`;
-    }
-    return res.status(200).send(result);
-  } catch (e) {
-    console.error(e);
-    return res.status(500).send("Server Error");
+    return res.sendStatus(400).send(JSON.stringify(e));
   }
 });
 const nut = (req, res, next) => {
