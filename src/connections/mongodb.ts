@@ -3,8 +3,7 @@ import {
   dropsProject,
   statsProject,
   raritiesProject,
-  skillsProject,
-  miscProject
+  skillsProject
 } from "./schemas";
 import logger from "../logger";
 import { determineIfAvailable } from "./availability";
@@ -43,7 +42,6 @@ export const getSkills = async (ref: Collection<any>, name: string) => {
   logger.info(`Fetching skills for ${name}`);
   return ref.findOne({ name }, { projection: skillsProject });
 };
-
 export const getSkins = async (ref: Collection<any>, name: string) => {
   return ref.findOne({ name }, { projection: { _id: 0, skins: 1 } });
 };
@@ -51,7 +49,8 @@ export const getRetrofits = async () => {
   const ref = getRef();
   return ref
     .find({ aaKai: { $exists: true } })
-    .project({ name: 1, __id: 0, id: 1 });
+    .project(raritiesProject)
+    .toArray();
 };
 export const status = () => {
   return client.isConnected();

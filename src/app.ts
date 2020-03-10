@@ -1,14 +1,6 @@
 import express from "express";
 import helmet from "helmet";
-import {
-  getDrops,
-  getStats,
-  getRarities,
-  getSkills,
-  getSkins,
-  status,
-  get
-} from "./connections/mongodb";
+import { getRarities, status, get, getRetrofits } from "./connections/mongodb";
 import logger from "./logger";
 import apiCacheA from "apicache";
 const app = express();
@@ -23,20 +15,30 @@ app.get("/", async (req, res) => {
   res.status(200).send(`Hi.
 Everything cool? ${await status()} `);
 });
+app.use((req, res, next) => {
+  res.set("content-type", "application/json");
+  next();
+});
 
 app.get("/rarities", async (req, res) => {
   try {
-    res.set("content-type", "application/json");
-    const conn = await getRarities();
     logger.info("Request for names");
-
-    return res.json(conn);
+    return res.json(await getRarities());
   } catch (e) {
     logger.error(e.message);
     return res.status(500).send("Server Error");
   }
 });
+app.get("/retrofits", async (req, res) => {
+  try {
+    logger.info("Request for names");
 
+    return res.json(await getRetrofits());
+  } catch (e) {
+    logger.error(e.message);
+    return res.status(500).send("Server Error");
+  }
+});
 app.get("/:intent/:name", async (req, res) => {
   const { intent, name } = req.params;
   if (intent === undefined || name === undefined) {
