@@ -19,7 +19,7 @@ steps:
       - "--image=us.gcr.io/$PROJECT_ID/$_SERVICE_NAME:latest"
       - "--region=us-central1"
       - "--quiet"
-      - "--set-env-vars=$MONGODB_KEY=$_MONGODB_KEY"
+      - "--set-env-vars=$_MONGODB_KEY=$_MONGODB_KEY"
 
     id: Deploy
 options:
