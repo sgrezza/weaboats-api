@@ -1,11 +1,11 @@
-FROM node:12.14.1-alpine as build
+FROM node:14.17.0-alpine as build
 WORKDIR /build
 COPY . /build
 
 RUN yarn --silent && \
     yarn run tsc
 # # Look up multistage builds
-FROM node:12.14.1-alpine
+FROM node:14.17.0-alpine
 
 ENV NODE_ENV=production
 
@@ -15,6 +15,6 @@ COPY --from=build /build/dist dist/
 RUN yarn --production && \
     yarn cache clean
 
-EXPOSE 3000
+EXPOSE 8080
 
 CMD ["yarn", "run", "serve"]

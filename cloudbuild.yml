@@ -1,0 +1,30 @@
+steps:
+  - name: "ubuntu"
+    args: ["echo", "$REPO_NAME", "/$_SERVICE_NAME"]
+
+  - name: "gcr.io/kaniko-project/executor:latest"
+    args:
+      - --destination=us.gcr.io/$PROJECT_ID/$_SERVICE_NAME
+      - --cache=true
+      - --cache-ttl=10h
+    id: Build
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: gcloud
+    args:
+      - run
+      - services
+      - update
+      - $_SERVICE_NAME
+      - "--platform=managed"
+      - "--image=us.gcr.io/$PROJECT_ID/$_SERVICE_NAME:latest"
+      - "--region=us-central1"
+      - "--quiet"
+      - "--set-env-vars=$MONGODB_KEY=$_MONGODB_KEY"
+
+    id: Deploy
+options:
+  substitutionOption: ALLOW_LOOSE
+substitutions:
+  _NODE_ENV: production
+  _SERVICE_NAME: ${REPO_NAME}${BRANCH_NAME%main}
+  _DEPLOY_REGION: us-central1
