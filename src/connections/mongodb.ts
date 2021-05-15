@@ -3,23 +3,22 @@ import {
   dropsProject,
   statsProject,
   raritiesProject,
-  skillsProject
+  skillsProject,
 } from "./schemas";
 import logger from "../logger";
 import { determineIfAvailable } from "./availability";
 const uri = process.env.MONGODB_KEY || "";
 export const client = new MongoClient(uri, {
   useNewUrlParser: true,
-  ssl: true,
   useUnifiedTopology: true,
-  connectTimeoutMS: 1000
+  connectTimeoutMS: 500,
 });
 type Intent = "skins" | "stats" | "drops" | "skills";
 
 const getRef = () => client.db("boats").collection("boats");
 
 export const getDrops = async (ref: Collection<any>, name: string) => {
-  return ref.findOne({ name }, { projection: dropsProject }).then(res => {
+  return ref.findOne({ name }, { projection: dropsProject }).then((res) => {
     const availability = determineIfAvailable(res, res.rarity);
     return { ...res, availability };
   });
@@ -59,7 +58,7 @@ const responser = {
   drops: getDrops,
   stats: getStats,
   skills: getSkills,
-  skins: getSkins
+  skins: getSkins,
 };
 export const get = async (intent: Intent, name: string) => {
   const ref = getRef();
